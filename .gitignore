@@ -1,5 +1,9 @@
 # Created by https://www.gitignore.io/api/python
 
+# Virtual environment
+gfvenv
+result.txt
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
