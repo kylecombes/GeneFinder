@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-TODO: YOUR HEADER COMMENT HERE
+Analyzes a strand of DNA to determine which proteins it codes for.
 
 @author: Kyle Combes
 
@@ -79,18 +79,10 @@ def rest_of_ORF(dna):
     if end < 4:
         return '' #
     for i in range(3,len(dna)-2,3):
-        try:
-            if dna[i] == 'T':
-                if dna[i+1] == 'A':
-                    if dna[i+2] == 'A' or dna[i+2] == 'G':
-                        end = i
-                        break
-                if dna[i+1] == 'G':
-                    if dna[i+2] == 'A':
-                        end = i
-                        break
-        except IndexError:
-            print('Trying to index string %s using index %i' % (dna, i))
+        c = dna[i:i+3]
+        if c == 'TAA' or c == 'TAG' or c == 'TGA':
+            end = i
+            break
     return dna[0:end]
 
 
@@ -135,9 +127,10 @@ def find_all_ORFs(dna):
     >>> find_all_ORFs("ATGCATGAATGTAG")
     ['ATGCATGAATGTAG', 'ATGAATGTAG', 'ATG']
     """
-    res = list()
-    for start_index in range(0,3):
-        res.extend(find_all_ORFs_oneframe(dna[start_index:]))
+    res = [find_all_ORFs_oneframe[dna[start_index:]] for start_index in range(3)]
+    #res = list()
+    #for start_index in range(0,3):
+    #    res.extend(find_all_ORFs_oneframe(dna[start_index:]))
     return res
 
 
@@ -154,7 +147,6 @@ def find_all_ORFs_both_strands(dna):
     bkwd = get_reverse_complement(dna)
     res.extend(find_all_ORFs(bkwd))
     return res
-
 
 def longest_ORF(dna):
     """ Finds the longest ORF on both strands of the specified DNA and returns it
@@ -201,6 +193,7 @@ def coding_strand_to_AA(dna):
         'MPA'
     """
     proteins = ''
+    # Could be written as a list comprehension if the if statement wasn't there
     for i in range(0, len(dna), 3):
         codon = dna[i:i+3]
         if len(codon) < 3: break
@@ -237,8 +230,9 @@ if __name__ == "__main__":
     parser.add_argument('filename', help='The text file to parse for DNA code')
     args = parser.parse_args()
     res = gene_finder(args.filename)
-    print('Found %i amino acid codings' % len(res))
+    print('Found %i amino acid codings. Check result.txt for the output.' % len(res))
     f = open('result.txt', 'w')
+    f.write('Each line codes for one protein:')
     for line in res:
         f.write('%s\n' % line)
     f.close()
