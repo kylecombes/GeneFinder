@@ -127,10 +127,10 @@ def find_all_ORFs(dna):
     >>> find_all_ORFs("ATGCATGAATGTAG")
     ['ATGCATGAATGTAG', 'ATGAATGTAG', 'ATG']
     """
-    res = [find_all_ORFs_oneframe[dna[start_index:]] for start_index in range(3)]
-    #res = list()
-    #for start_index in range(0,3):
-    #    res.extend(find_all_ORFs_oneframe(dna[start_index:]))
+    # res = [find_all_ORFs_oneframe(dna[start_index:]) for start_index in range(3)]
+    res = list()
+    for start_index in range(0,3):
+       res.extend(find_all_ORFs_oneframe(dna[start_index:]))
     return res
 
 
@@ -224,7 +224,7 @@ def gene_finder(filename):
 if __name__ == "__main__":
     import doctest
     import argparse
-    #doctest.testmod()
+    doctest.testmod()
     #doctest.run_docstring_examples(coding_strand_to_AA, globals())
     parser = argparse.ArgumentParser(description='Accept passing DNA filename')
     parser.add_argument('filename', help='The text file to parse for DNA code')
@@ -232,7 +232,7 @@ if __name__ == "__main__":
     res = gene_finder(args.filename)
     print('Found %i amino acid codings. Check result.txt for the output.' % len(res))
     f = open('result.txt', 'w')
-    f.write('Each line codes for one protein:')
+    f.write('Each line codes for one protein:\n')
     for line in res:
         f.write('%s\n' % line)
     f.close()
