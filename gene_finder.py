@@ -210,11 +210,12 @@ def gene_finder(filename):
     """
     from load import load_seq
     dna = load_seq(filename)
+
+
     threshold = longest_ORF_noncoding(dna, 100)
     orfs = find_all_ORFs_both_strands(dna)
     amino_acids = list()
-    for i in range(0,len(orfs)):
-        orf = orfs[i]
+    for orf in orfs:
         if len(orf) > threshold:
             aa = coding_strand_to_AA(orf)
             amino_acids.append(aa)
